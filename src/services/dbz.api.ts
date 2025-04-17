@@ -1,7 +1,7 @@
 import { Personaje } from "../models/Personaje"
 
 const url = "https://dragonball-api.com/api/characters?limit=100"
-export const leerApis = async (): Promise<Personaje[]> => {
+export const getPersonajes = async (): Promise<Personaje[]> => {
     let data: Personaje[] = []
 
     try {
