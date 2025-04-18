@@ -23,7 +23,13 @@
     object-fit: contain;
     z-index: 1;
     transition: transform 0.6s;
+    /* mask-image: linear-gradient(black 80%, transparent); */
+    filter: drop-shadow(5px 5px 12px #000000 );
+
 }
 .img-personaje img:hover{
     transform: scale(1.2);
+    /* background-color: #fff; */
+    /* border: 1px solid red; */
+    /* filter: drop-shadow(0px 0px 12px #000000 ); */
 }

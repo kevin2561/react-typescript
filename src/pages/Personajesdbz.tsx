@@ -4,10 +4,13 @@ import { getPersonajes } from "../services/dbz.api";
 import './Personajesdbz.css'
 
 export default function Personajesdbz() {
-    const [perosnajes, setPersonajes] = useState<Personaje[]>([])
+    const [personajes, setPersonajes] = useState<Personaje[]>([])
+
+    const [personajesFiltrados, setPersonajesFiltrados] = useState<Personaje[]>([])
+    const [textoFiltro, setTextoFiltro] = useState("")
+    const [cardsPagina, setCardsPagina] = useState(10)
     const [paginaActual, setPaginaActual] = useState(0)
-    const [totalPaginas, setTotalPaginas] = useState(10)
-    //const []
+    const [totalPaginas, setTotalPaginas] = useState(0)
 
     useEffect(() => {
         leerPersonajes();
@@ -16,13 +19,63 @@ export default function Personajesdbz() {
     const leerPersonajes = async () => {
         const datos = await getPersonajes();
         setPersonajes(datos)
-        console.log(datos)
+        setPersonajesFiltrados(datos)
+        // console.log(datos)
+        setTotalPaginas(Math.ceil(datos.length / cardsPagina))
     }
+    const filtrarPersonajes = (texto: string) => {
+
+        setTextoFiltro(texto)
+        if (texto.trim() === "") {
+            setPersonajesFiltrados(personajes)
+        }
+        else {
+            const filtrados = personajes.filter(personaje =>
+                personaje.name.toLowerCase().includes(texto.trim().toLowerCase())
+            )
+            setPersonajesFiltrados(filtrados)
+            setPaginaActual(0)
+        }
+    }
+    const retrocedorPagina = () => {
+        if (paginaActual > 0) {
+            setPaginaActual(paginaActual - 1)
+        }
+        console.log(paginaActual)
+
+        console.log("atras")
+    }
+    const avanzarPagina = () => {
+        if (paginaActual < totalPaginas - 1) {
+            setPaginaActual(paginaActual + 1)
+
+        }
+        console.log(paginaActual)
+
+        console.log("adelante")
+
+    }
+
     const htmlPersonajes = () => {
         return (
             <>
+                <nav aria-label="Page navigation example" className="mb-5">
+                    <ul className="pagination">
+                        <li className="page-item">
+                            <a className="page-link cursor-pointer" href="#" aria-label="Previous" onClick={(e) => { e.preventDefault(); retrocedorPagina() }}>
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        {pagination()}
+                        <li className="page-item">
+                            <a className="page-link cursor-pointer" href="#" aria-label="Next" onClick={(e) => { e.preventDefault(); avanzarPagina() }}>
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
                 <div className="row row-cols-1 row-cols-md-4 g-4">
-                    {perosnajes.map(personaje =>
+                    {personajesFiltrados.slice(paginaActual * cardsPagina, (paginaActual + 1) * cardsPagina).map(personaje =>
                         <div className="col" key={personaje.id}>
                             <div className="card">
                                 <div className="img-personaje">
@@ -39,30 +92,46 @@ export default function Personajesdbz() {
                     )}
 
                 </div>
-                <nav aria-label="Page navigation example">
-                    <ul className="pagination">
-                        <li className="page-item">
-                            <a className="page-link" href="#" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        </li>
-                        <li className="page-item"><a className="page-link" href="#">1</a></li>
-                        <li className="page-item"><a className="page-link" href="#">2</a></li>
-                        <li className="page-item"><a className="page-link" href="#">3</a></li>
-                        <li className="page-item">
-                            <a className="page-link" href="#" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
+
+            </>
+        )
+    }
+    const pagination = () => {
+        return (
+            <>
+                {[...Array(totalPaginas)].map((_, index) =>
+                    <li key={index} className={"page-item " + (index === paginaActual ? "active" : "")}
+                    >
+
+                        <a className="page-link" onClick={() => setPaginaActual(index)}>{index + 1}</a></li>
+
+
+                )}
+            </>
+
+        )
+    }
+
+    const mensaje = () => {
+        return (
+            <>
+                <div className="alert alert-warning" role="alert">
+                    No se encontraron personajes
+
+                </div>
             </>
         )
     }
     return (
         <>
-            <section className="container">
+            <section className="container mt-5">
+                <div className="mb-5">
+                    <input type="text" placeholder="Buscar personaje" className="form-control" value={textoFiltro} onChange={(e) => filtrarPersonajes(e.target.value)} />
+                </div>
                 {htmlPersonajes()}
+                {personajesFiltrados.length === 0
+                    ? mensaje()
+                    : personajesFiltrados.length + " registros"}
             </section>
         </>
     )

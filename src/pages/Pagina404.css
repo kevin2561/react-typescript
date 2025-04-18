@@ -1,0 +1,10 @@
+.contenedor-404{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+.contenedor-404 img{
+    width: 50%;
+   
+}
