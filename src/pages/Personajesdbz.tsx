@@ -2,6 +2,9 @@ import { useEffect, useState } from "react"
 import { Personaje } from "../models/Personaje"
 import { getPersonajes } from "../services/dbz.api";
 import './Personajesdbz.css'
+import PageHeader from "../components/PageHeader";
+import { Link } from "react-router-dom";
+import DetallePersonajedbz from "./DetallePersonajedbz";
 
 export default function Personajesdbz() {
     const [personajes, setPersonajes] = useState<Personaje[]>([])
@@ -56,6 +59,7 @@ export default function Personajesdbz() {
 
     }
 
+
     const htmlPersonajes = () => {
         return (
             <>
@@ -75,23 +79,26 @@ export default function Personajesdbz() {
                     </ul>
                 </nav>
                 <div className="row row-cols-1 row-cols-md-4 g-4">
-                    {personajesFiltrados.slice(paginaActual * cardsPagina, (paginaActual + 1) * cardsPagina).map(personaje =>
-                        <div className="col" key={personaje.id}>
-                            <div className="card">
-                                <div className="img-personaje">
-                                    <img id="img-personajes" src={personaje.image} className="card-img-top" alt="..." />
+                    {personajesFiltrados.slice(paginaActual * cardsPagina, (paginaActual + 1) * cardsPagina).map((personaje, index) =>
+                        <Link key={personaje.id} to={"/personajes/detalle-personaje/" + personaje.name} state={{ personaje }}   >
+                            <div className="col">
+                                <div className="card">
+                                    <div className="img-personaje">
+                                        <img id="img-personajes" src={personaje.image} className="card-img-top" alt="..." />
 
-                                </div>
-                                <div className="card-body mt-3">
-                                    <h5 className="card-title">Nombre: {personaje.name}</h5>
-                                    <p className="card-text">Raza: {personaje.race}</p>
-                                    <p className="card-text">ki: {parseFloat(personaje.ki).toFixed(6)}</p>
+                                    </div>
+                                    <div className="card-body mt-3">
+                                        <h5 className="card-title">Nombre: {personaje.name}</h5>
+                                        <p className="card-text">Raza: {personaje.race}</p>
+                                        <p className="card-text">ki: {parseFloat(personaje.ki).toFixed(6)}</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </Link>
+
                     )}
 
-                </div>
+                </div >
 
             </>
         )
@@ -124,6 +131,7 @@ export default function Personajesdbz() {
     }
     return (
         <>
+            <PageHeader tituloPage={"Personajes"} />
             <section className="container mt-5">
                 <div className="mb-5">
                     <input type="text" placeholder="Buscar personaje" className="form-control" value={textoFiltro} onChange={(e) => filtrarPersonajes(e.target.value)} />
