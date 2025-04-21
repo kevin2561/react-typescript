@@ -1,0 +1,30 @@
+#columna-1 {
+    background-color: red;
+}
+
+
+#columna-1 img {
+    width: 50%;
+
+}
+.contenedor-carusel {
+    width: 100%;
+    height: auto;
+    display: flex
+;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: green;
+
+
+}
+
+
+.contenedor-carusel img {
+    width: 50% !important;
+    height: 50%;
+    object-fit: contain;
+    background-color: transparent;
+}
+
