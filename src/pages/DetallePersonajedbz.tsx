@@ -11,15 +11,20 @@ type Props = {
 
 export default function DetallePersonajedbz() {
     const [personajeSeleccionado, setPersoanjeSeleccionado] = useState<DetallePersonaje | undefined>(undefined)
+    const [loading, setLoading] = useState(false)
     useEffect(() => {
         leerServicioDetalle()
     }, [])
     const location = useLocation();
+    console.log(location)
     const { personaje } = location.state as { personaje: Personaje }
 
     const leerServicioDetalle = async () => {
+        setLoading(true)
         const personajeUnico = await getDetallePersonaje(personaje.id)
         setPersoanjeSeleccionado(personajeUnico)
+        setLoading(false)
+
     }
 
     const carruselTransformaciones = () => {
@@ -71,10 +76,8 @@ export default function DetallePersonajedbz() {
         )
     }
 
-
-
-    return (
-        <section className='container'>
+    const detallePersonajeHTML = () => {
+        return (
             <div className="row">
                 <div className={personajeSeleccionado?.transformations.length === 0 ? "col-md-12" : "col-md-6"}>
                     <div id='columna-1' className='text-center'>
@@ -84,7 +87,21 @@ export default function DetallePersonajedbz() {
                 </div>
                 {personajeSeleccionado?.transformations.length === 0 ? "" : carruselTransformaciones()}
             </div>
+        )
 
+    }
+
+
+    return (
+        <section className='container'>
+
+            {loading ? (
+                <div className="spinner-border text-primary" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                </div>
+            ) : (
+                detallePersonajeHTML()
+            )}
 
         </section>
     )

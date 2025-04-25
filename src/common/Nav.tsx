@@ -1,7 +1,9 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
+import { menuList } from '../data/menuList'
 
 export default function Nav() {
+  const location = useLocation();
+  console.log(location)
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
       <div className="container-fluid">
@@ -11,10 +13,15 @@ export default function Nav() {
         </button>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-            <li className="nav-item">
-              <Link className="nav-link active" aria-current="page" to={"/personajes"} >Personajes</Link>
-            </li>
-            <li className="nav-item">
+            {/* <Link className="nav-link active" aria-current="page" to={"/personajes"} >Personajes</Link> */}
+            {menuList.map((item, index) =>
+              <li className="nav-item" key={index}>
+
+                <Link className={"nav-link " + (location.pathname === `/${item.url}` ? "active" : "")} aria-current="page" to={`/${item.url}`}>{item.nombre}</Link>
+              </li>
+            )}
+
+            {/* <li className="nav-item">
               <a className="nav-link" href="#">Link</a>
             </li>
             <li className="nav-item dropdown">
@@ -30,7 +37,7 @@ export default function Nav() {
             </li>
             <li className="nav-item">
               <a className="nav-link disabled" aria-disabled="true">Disabled</a>
-            </li>
+            </li> */}
           </ul>
           <form className="d-flex" role="search">
             <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
