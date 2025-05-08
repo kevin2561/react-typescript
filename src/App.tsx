@@ -6,7 +6,7 @@ import Footer from './common/Footer'
 import Header from './common/Header'
 import Inicio from './pages/Inicio'
 import DetallePersonajedbz from './pages/DetallePersonajedbz'
-import Hooks from './components/Hooks'
+import Hooks from './components/HooksUseContent'
 
 function App() {
 
